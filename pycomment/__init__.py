@@ -1,6 +1,3 @@
-import sys
-import contextlib
-from io import StringIO
 from pycomment.parse import (
     parse_string,
     PyTreeVisitor,
@@ -74,7 +71,7 @@ class Transformer(PyTreeVisitor):
             # xxx: for first line
             if not print_stmt.prefix:
                 prev_line = assigned.parent.prev_sibling
-                if prev_line.type == token.INDENT:
+                if prev_line is not None and prev_line.type == token.INDENT:
                     print_stmt.prefix = prev_line.value
 
             print_stmt.append_child(Newline())
