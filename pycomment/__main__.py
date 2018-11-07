@@ -9,10 +9,12 @@ from pycomment import (
 STDOUT_HEADER_MARKER = "# -- stdout --------------------"
 
 
-def run(sourcefile, out=sys.stdout):
+def run(sourcefile, out=sys.stdout, g=None):
     o = StringIO()
     with contextlib.redirect_stdout(o):
-        exec(str(transform_file(sourcefile)))
+        code = str(transform_file(sourcefile))
+        g = g or {}
+        exec(code, g, g)
 
     result_map = {}
     stdout_outputs = []
