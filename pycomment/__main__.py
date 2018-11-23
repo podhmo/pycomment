@@ -21,7 +21,7 @@ def run(sourcefile, out=sys.stdout, g=None):
     for line in o.getvalue().splitlines():
         if line.startswith(SEP_MARKER) and line.endswith(SEP_MARKER):
             line = line.strip(SEP_MARKER)
-            lineno, line = line.split(":", 2)
+            lineno, line = line.split(":", 1)
             result_map[lineno] = line
         else:
             stdout_outputs.append(line)
