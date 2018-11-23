@@ -13,8 +13,8 @@ def run(sourcefile, out=sys.stdout, g=None):
     o = StringIO()
     with contextlib.redirect_stdout(o):
         code = str(transform_file(sourcefile))
-        g = g or {}
-        exec(code, g, g)
+        g = g or {"__name__": "exec"}
+        exec(code, g)
 
     result_map = {}
     stdout_outputs = []
