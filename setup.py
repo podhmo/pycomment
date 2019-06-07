@@ -1,5 +1,4 @@
 import os
-import sys
 
 from setuptools import setup, find_packages
 
@@ -14,8 +13,7 @@ except IOError:
 
 install_requires = []
 
-docs_extras = []
-
+dev_extras = ["black"]
 tests_require = []
 
 testing_extras = tests_require + []
@@ -37,7 +35,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=install_requires,
-    extras_require={"testing": testing_extras, "docs": docs_extras},
+    extras_require={"testing": testing_extras, "dev": dev_extras},
     tests_require=tests_require,
     test_suite="pycomment.tests",
     entry_points="""
