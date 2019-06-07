@@ -4,7 +4,9 @@ from lib2to3.pgen2 import driver
 from lib2to3.pgen2 import token
 from lib2to3.pgen2.parse import ParseError
 
-default_driver = driver.Driver(pygram.python_grammar_no_print_statement, convert=pytree.convert)
+default_driver = driver.Driver(
+    pygram.python_grammar_no_print_statement, convert=pytree.convert
+)
 
 
 def parse_string(code, parser_driver=default_driver, *, debug=True):
@@ -35,7 +37,7 @@ type_repr = pytree.type_repr
 
 class PyTreeVisitor:
     def visit(self, node):
-        method = 'visit_{0}'.format(node_name(node))
+        method = "visit_{0}".format(node_name(node))
         if hasattr(self, method):
             # Found a specific visitor for this node
             if getattr(self, method)(node):

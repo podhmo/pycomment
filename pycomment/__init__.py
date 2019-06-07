@@ -1,8 +1,4 @@
-from pycomment.parse import (
-    parse_string,
-    PyTreeVisitor,
-    type_repr,
-)
+from pycomment.parse import parse_string, PyTreeVisitor, type_repr
 from lib2to3.pgen2 import token
 from lib2to3.fixer_util import Assign, Name, Newline
 
