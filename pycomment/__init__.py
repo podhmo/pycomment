@@ -1,4 +1,5 @@
 from pycomment.parse import parse_string, PyTreeVisitor, type_repr
+from pycomment.langhelpers import reify
 from lib2to3.pgen2 import token
 from lib2to3.fixer_util import Assign, Name, Newline
 
