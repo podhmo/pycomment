@@ -52,7 +52,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("sourcefile")
-    parser.add_argument("--inplace", action="store_true")
+    parser.add_argument("-i", "--inplace", action="store_true")
     parser.add_argument("--show-only", action="store_true")
 
     args = parser.parse_args()
