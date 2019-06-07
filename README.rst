@@ -1,7 +1,7 @@
 pycomment
 ========================================
 
-Inserting repr value on commen with marker (marker is `# =>`).
+Inserting repr value on comment with marker (marker is `# =>`).
 This is heavily inspired by xmpfilter of ruby's `rocodetools <https://github.com/rcodetools/rcodetools>`_
 
 install
