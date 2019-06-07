@@ -1,11 +1,8 @@
 import sys
 import contextlib
 from io import StringIO
-from pycomment import (
-    transform_file,
-    SEP_MARKER,
-    COMMENT_MARKER,
-)
+from pycomment import transform_file, SEP_MARKER, COMMENT_MARKER
+
 STDOUT_HEADER_MARKER = "# -- stdout --------------------"
 
 
@@ -30,6 +27,7 @@ def run(sourcefile, out=sys.stdout, g=None):
 
     with open(sourcefile) as rf:
         import re
+
         rx = re.compile(COMMENT_MARKER + ".*$")
         for lineno, line in enumerate(rf, 1):
             if line.rstrip() == STDOUT_HEADER_MARKER:
@@ -40,7 +38,7 @@ def run(sourcefile, out=sys.stdout, g=None):
             if m is None or k not in result_map:
                 print(line, end="", file=out)
             else:
-                print(line[:m.start()] + COMMENT_MARKER, result_map[k], file=out)
+                print(line[: m.start()] + COMMENT_MARKER, result_map[k], file=out)
                 i += 1
 
     if stdout_outputs:
@@ -51,6 +49,7 @@ def run(sourcefile, out=sys.stdout, g=None):
 
 def main():
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument("sourcefile")
     parser.add_argument("--inplace", action="store_true")
@@ -61,6 +60,7 @@ def main():
     if args.show_only:
         print(str(transform_file(args.sourcefile)))
         from prestring.python.parse import dump_tree
+
         dump_tree(transform_file(args.sourcefile))
     elif not args.inplace:
         run(args.sourcefile)
