@@ -1,5 +1,4 @@
 from pycomment.parse import parse_string, PyTreeVisitor, type_repr
-from pycomment.langhelpers import reify
 from lib2to3.pgen2 import token
 from lib2to3.fixer_util import Assign, Name, Newline
 
@@ -77,5 +76,6 @@ class Transformer(PyTreeVisitor):
                 if stmt == this_stmt:
                     this_stmt.parent.insert_child(i + 1, print_stmt)
                     break
+        self.prev_newline = node
 
     transform = PyTreeVisitor.visit
