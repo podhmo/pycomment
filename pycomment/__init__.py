@@ -76,5 +76,6 @@ class Transformer(PyTreeVisitor):
                 if stmt == this_stmt:
                     this_stmt.parent.insert_child(i + 1, print_stmt)
                     break
+        self.prev_newline = node
 
     transform = PyTreeVisitor.visit

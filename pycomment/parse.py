@@ -3,9 +3,16 @@ from lib2to3 import pygram
 from lib2to3.pgen2 import driver
 from lib2to3.pgen2 import token
 from lib2to3.pgen2.parse import ParseError
+import logging
+from .langhelpers import reify
 
+logger = logging.getLogger(__name__)
+null_logger = logging.getLogger("_null")
+null_logger.setLevel(logging.CRITICAL)
 default_driver = driver.Driver(
-    pygram.python_grammar_no_print_statement, convert=pytree.convert
+    pygram.python_grammar_no_print_statement,
+    convert=pytree.convert,
+    logger=null_logger,  # suppress default lib2.pgen2.driver's logging
 )
 
 
@@ -36,17 +43,28 @@ type_repr = pytree.type_repr
 
 
 class PyTreeVisitor:
-    def visit(self, node):
-        method = "visit_{0}".format(node_name(node))
-        if hasattr(self, method):
-            # Found a specific visitor for this node
-            if getattr(self, method)(node):
-                return
+    @reify
+    def level(self) -> int:
+        return 0
 
-        elif hasattr(node, "value"):  # Leaf
-            self.default_leaf_visit(node)
-        else:
-            self.default_node_visit(node)
+    def visit(self, node):
+        try:
+            method = "visit_{0}".format(node_name(node))
+
+            self.level += 1
+            logger.debug("%s%s (prefix=%r)", "  " * self.level, method, node.prefix)
+
+            if hasattr(self, method):
+                # Found a specific visitor for this node
+                if getattr(self, method)(node):
+                    return
+
+            elif hasattr(node, "value"):  # Leaf
+                self.default_leaf_visit(node)
+            else:
+                self.default_node_visit(node)
+        finally:
+            self.level -= 1
 
     def default_node_visit(self, node):
         for child in node.children:

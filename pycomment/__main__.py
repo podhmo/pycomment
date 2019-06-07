@@ -49,14 +49,20 @@ def run(sourcefile, out=sys.stdout, g=None):
 
 def main():
     import argparse
+    import logging
 
     parser = argparse.ArgumentParser()
     parser.add_argument("sourcefile")
+    parser.add_argument(
+        "--logging", default="INFO", choices=list(logging._nameToLevel.keys())
+    )
     parser.add_argument("-i", "--inplace", action="store_true")
     parser.add_argument("--show-code", action="store_true")
     parser.add_argument("--show-ast", action="store_true")
 
     args = parser.parse_args()
+
+    logging.basicConfig(level=args.logging)
 
     if args.show_ast:
         from prestring.python.parse import dump_tree
