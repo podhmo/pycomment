@@ -53,15 +53,19 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("sourcefile")
     parser.add_argument("-i", "--inplace", action="store_true")
-    parser.add_argument("--show-only", action="store_true")
+    parser.add_argument("--show-code", action="store_true")
+    parser.add_argument("--show-ast", action="store_true")
 
     args = parser.parse_args()
 
-    if args.show_only:
-        print(str(transform_file(args.sourcefile)))
+    if args.show_ast:
         from prestring.python.parse import dump_tree
 
         dump_tree(transform_file(args.sourcefile))
+        return
+    elif args.show_code:
+        print(str(transform_file(args.sourcefile)))
+        return
     elif not args.inplace:
         run(args.sourcefile)
     else:
