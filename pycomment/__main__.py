@@ -1,50 +1,17 @@
 import sys
-import contextlib
-from io import StringIO
-from pycomment import transform_file, SEP_MARKER, COMMENT_MARKER
-
-STDOUT_HEADER_MARKER = "# -- stdout --------------------"
+from pycomment.transform import transform_file
+from pycomment.capture import capture
+from pycomment.emit import emit
 
 
 def run(sourcefile, out=sys.stdout, g=None):
-    o = StringIO()
-    with contextlib.redirect_stdout(o):
-        code = str(transform_file(sourcefile))
-        g = g or {"__name__": "exec"}
-        exec(code, g)
-
-    result_map = {}
-    stdout_outputs = []
-    for line in o.getvalue().splitlines():
-        if line.startswith(SEP_MARKER) and line.endswith(SEP_MARKER):
-            line = line.strip(SEP_MARKER)
-            lineno, line = line.split(":", 1)
-            result_map[lineno] = line
-        else:
-            stdout_outputs.append(line)
-
-    i = 0
+    code = str(transform_file(sourcefile))
+    capture_result = capture(code, g=g)
 
     with open(sourcefile) as rf:
-        import re
-
-        rx = re.compile(COMMENT_MARKER + ".*$")
-        for lineno, line in enumerate(rf, 1):
-            if line.rstrip() == STDOUT_HEADER_MARKER:
-                break
-
-            m = rx.search(line)
-            k = str(lineno)
-            if m is None or k not in result_map:
-                print(line, end="", file=out)
-            else:
-                print(line[: m.start()] + COMMENT_MARKER, result_map[k], file=out)
-                i += 1
-
-    if stdout_outputs:
-        print(STDOUT_HEADER_MARKER, file=out)
-        for line in stdout_outputs:
-            print("# >>", line, file=out)
+        emit(
+            rf, result_map=capture_result.comments, rest=capture_result.stdout, out=out
+        )
 
 
 def main():
@@ -90,3 +57,7 @@ def main():
             if os.path.exists(name):
                 os.unlink(name)
             raise
+
+
+if __name__ == "__main__":
+    main()
