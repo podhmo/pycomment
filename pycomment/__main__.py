@@ -1,39 +1,20 @@
 import sys
-from io import StringIO
-from pycomment import transform_file, COMMENT_MARKER
+from pycomment import transform_file
 from pycomment.capture import capture
-
-STDOUT_HEADER_MARKER = "# -- stdout --------------------"
+from pycomment.emit import emit
 
 
 def run(sourcefile, out=sys.stdout, g=None):
-    o = StringIO()
     code = str(transform_file(sourcefile))
-    capture_result = capture(code, g=g, o=o)
-
-    i = 0
-    result_map = capture_result.comments
+    capture_result = capture(code, g=g)
 
     with open(sourcefile) as rf:
-        import re
-
-        rx = re.compile(COMMENT_MARKER + ".*$")
-        for lineno, line in enumerate(rf, 1):
-            if line.rstrip() == STDOUT_HEADER_MARKER:
-                break
-
-            m = rx.search(line)
-            k = str(lineno)
-            if m is None or k not in result_map:
-                print(line, end="", file=out)
-            else:
-                print(line[: m.start()] + COMMENT_MARKER, result_map[k], file=out)
-                i += 1
-
-    if capture_result.stdout:
-        print(STDOUT_HEADER_MARKER, file=out)
-        for line in capture_result.stdout:
-            print("# >>", line, file=out)
+        emit(
+            rf,
+            result_map=capture_result.comments,
+            rest=capture_result.stdout,
+            out=sys.stdout,
+        )
 
 
 def main():

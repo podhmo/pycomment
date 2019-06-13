@@ -8,6 +8,8 @@ SEP = "\U000F0000"
 SEP_MARKER = "ZZ{}ZZ".format(SEP)
 COMMENT_MARKER = "# =>"
 
+STDOUT_HEADER_MARKER = "# -- stdout --------------------"
+
 
 def transform_string(source: str):
     t = parse_string(source)

@@ -1,3 +1,4 @@
+import typing as t
 import contextlib
 from collections import namedtuple
 from io import StringIO
@@ -6,8 +7,8 @@ from . import SEP_MARKER
 CaptureResult = namedtuple("CaptureResult", "comments, stdout")
 
 
-def capture(code, *, o=None, g=None):
-    o = o or StringIO()
+def capture(code: str, *, g: t.Optional[t.IO] = None):
+    o = StringIO()
     with contextlib.redirect_stdout(o):
         g = g or {"__name__": "exec"}
         exec(code, g)
