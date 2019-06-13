@@ -1,29 +1,18 @@
 import sys
-import contextlib
 from io import StringIO
-from pycomment import transform_file, SEP_MARKER, COMMENT_MARKER
+from pycomment import transform_file, COMMENT_MARKER
+from pycomment.capture import capture
 
 STDOUT_HEADER_MARKER = "# -- stdout --------------------"
 
 
 def run(sourcefile, out=sys.stdout, g=None):
     o = StringIO()
-    with contextlib.redirect_stdout(o):
-        code = str(transform_file(sourcefile))
-        g = g or {"__name__": "exec"}
-        exec(code, g)
-
-    result_map = {}
-    stdout_outputs = []
-    for line in o.getvalue().splitlines():
-        if line.startswith(SEP_MARKER) and line.endswith(SEP_MARKER):
-            line = line.strip(SEP_MARKER)
-            lineno, line = line.split(":", 1)
-            result_map[lineno] = line
-        else:
-            stdout_outputs.append(line)
+    code = str(transform_file(sourcefile))
+    capture_result = capture(code, g=g, o=o)
 
     i = 0
+    result_map = capture_result.comments
 
     with open(sourcefile) as rf:
         import re
@@ -41,9 +30,9 @@ def run(sourcefile, out=sys.stdout, g=None):
                 print(line[: m.start()] + COMMENT_MARKER, result_map[k], file=out)
                 i += 1
 
-    if stdout_outputs:
+    if capture_result.stdout:
         print(STDOUT_HEADER_MARKER, file=out)
-        for line in stdout_outputs:
+        for line in capture_result.stdout:
             print("# >>", line, file=out)
 
 
