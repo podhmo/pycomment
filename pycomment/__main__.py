@@ -10,10 +10,7 @@ def run(sourcefile, out=sys.stdout, g=None):
 
     with open(sourcefile) as rf:
         emit(
-            rf,
-            result_map=capture_result.comments,
-            rest=capture_result.stdout,
-            out=sys.stdout,
+            rf, result_map=capture_result.comments, rest=capture_result.stdout, out=out
         )
 
 
