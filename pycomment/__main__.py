@@ -1,5 +1,5 @@
 import sys
-from pycomment import transform_file
+from pycomment.transform import transform_file
 from pycomment.capture import capture
 from pycomment.emit import emit
 
@@ -60,3 +60,7 @@ def main():
             if os.path.exists(name):
                 os.unlink(name)
             raise
+
+
+if __name__ == "__main__":
+    main()
