@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/podhmo/pycomment.svg?branch=master
+    :target: https://travis-ci.org/podhmo/pycomment
+
 pycomment
 ========================================
 
