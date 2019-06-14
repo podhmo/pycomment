@@ -20,8 +20,8 @@ testing_extras = tests_require + []
 
 setup(
     name="pycomment",
-    version="0.0.3",
-    description="with repr value at comment",
+    version="0.0.4",
+    description="with repr value as comment",
     long_description=README + "\n\n" + CHANGES,
     classifiers=[
         "Programming Language :: Python",

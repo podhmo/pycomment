@@ -1,1 +1,5 @@
+0.0.4:
+
+- multi-line output suppor (#12)
+- `-i` option is added, same as `--inplace` (#7)
 
