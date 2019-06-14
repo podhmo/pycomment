@@ -14,12 +14,28 @@ def capture(code: str, *, g: t.Optional[t.IO] = None):
         exec(code, g)
 
     result_map = {}
-    stdout_outputs = []
-    for line in o.getvalue().splitlines():
-        if line.startswith(SEP_MARKER) and line.endswith(SEP_MARKER):
-            line = line.strip(SEP_MARKER)
-            lineno, line = line.split(":", 1)
-            result_map[lineno] = line
+    rest = []
+
+    reading = False
+    buf = None
+    lineno = None
+
+    lines = o.getvalue().splitlines()
+    for line in lines:
+        if reading:
+            if line.endswith(SEP_MARKER):
+                reading = False
+                buf.append(line.rstrip(SEP_MARKER))
+                result_map[lineno] = "\n".join(buf)
+            else:
+                buf.append(line)
+        elif line.startswith(SEP_MARKER):
+            reading = True
+            lineno, line = line.lstrip(SEP_MARKER).split(":", 1)
+            buf = [line]
+            if line.endswith(SEP_MARKER):
+                reading = False
+                result_map[lineno] = buf[0].rstrip(SEP_MARKER)
         else:
-            stdout_outputs.append(line)
-    return CaptureResult(comments=result_map, stdout=stdout_outputs)
+            rest.append(line)
+    return CaptureResult(comments=result_map, stdout=rest)
