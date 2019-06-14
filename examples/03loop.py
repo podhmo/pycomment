@@ -9,7 +9,7 @@ import itertools
 
 itertools.combinations(
     [1, 2, 3, 4, 5], 2
-)  # => <itertools.combinations object at 0x7fe9f8135ef8>
+)  # => <itertools.combinations object at 0x7f4d6f51c4a8>
 list(
     itertools.combinations([1, 2, 3, 4, 5], 3)
 )  # => [(1, 2, 3), (1, 2, 4), (1, 2, 5), (1, 3, 4), (1, 3, 5), (1, 4, 5), (2, 3, 4), (2, 3, 5), (2, 4, 5), (3, 4, 5)]
