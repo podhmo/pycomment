@@ -10,16 +10,17 @@ def emit(
     *,
     result_map: t.Dict[str, t.List[str]],
     rest: t.List[str],
-    out: t.IO = sys.stdout
+    out: t.IO = sys.stdout,
+    _rx=re.compile(COMMENT_MARKER + ".*$"),
+    _padding_rx=re.compile("^[ 	]*"),
 ) -> None:
     i = 0  # xxx
-    rx = re.compile(COMMENT_MARKER + ".*$")
     itr = PushBackIterator(enumerate(rf, 1))
     for lineno, line in itr:
         if line.rstrip() == STDOUT_HEADER_MARKER:
             break
 
-        m = rx.search(line)
+        m = _rx.search(line)
         k = str(lineno)
         if m is None or k not in result_map:
             print(line, end="", file=out)
@@ -28,11 +29,11 @@ def emit(
             if len(comments) == 1:
                 print(line[: m.start()] + COMMENT_MARKER, comments[0], file=out)
             else:
-                print(
-                    line[: m.start()] + COMMENT_MARKER,
-                    "multi-line..",
-                    file=out,
-                )
+                print(line[: m.start()] + COMMENT_MARKER, "multi-line..", file=out)
+                padding = ""
+                m = _padding_rx.match(line)
+                if m is not None:
+                    padding = m.group(0)
 
                 for lineno, line in itr:
                     if not line.startswith("# "):
@@ -42,8 +43,8 @@ def emit(
                         break
 
                 for comment in comments:
-                    print("#", comment, file=out)
-                print("# ..multi-line", file=out)
+                    print(f"{padding}# {comment}", file=out)
+                print(f"{padding}# ..multi-line", file=out)
             i += 1
 
     if rest:
