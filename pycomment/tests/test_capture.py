@@ -1,9 +1,10 @@
 import unittest
 import textwrap
 from collections import namedtuple
+from .testing import AssertDiffMixin
 
 
-class Tests(unittest.TestCase):
+class Tests(unittest.TestCase, AssertDiffMixin):
     def _callFUT(self, code):
         from pycomment.capture import capture
 
@@ -20,7 +21,7 @@ _ = ["hello", "bye"][0] + " world"  # => "hello world"
 print('ZZ\U000f0000ZZ1:', repr(_), 'ZZ\U000f0000ZZ', sep='')
                     """
                 ).strip(),
-                comments={"1": repr("hello world")},
+                comments={"1": [repr("hello world")]},
                 stdout=[],
             ),
             C(
@@ -49,7 +50,7 @@ print('ZZ\U000f0000ZZ6:', repr(_), 'ZZ\U000f0000ZZ', sep='')
 print("bye")
                     """
                 ).strip(),
-                comments={"5": "18", "6": "18"},
+                comments={"5": ["18"], "6": ["18"]},
                 stdout=["hello", "bye"],
             ),
             C(
@@ -77,7 +78,7 @@ print('ZZ\U000f0000ZZ10:', repr(_), 'ZZ\U000f0000ZZ', sep='')
 main()
                     """
                 ).strip(),
-                comments={"3": "60", "6": "25", "10": "6"},
+                comments={"3": ["60"], "6": ["25"], "10": ["6"]},
                 stdout=["Hoi"],
             ),
             C(
@@ -97,7 +98,26 @@ _ = x = 1 - 10  # => -9
 print('ZZ\U000f0000ZZ17:', repr(_), 'ZZ\U000f0000ZZ', sep='')
                     """
                 ).strip(),
-                comments={"2": "9", "4": "81", "6": "(1, 81, 9)", "17": "-9"},
+                comments={"2": ["9"], "4": ["81"], "6": ["(1, 81, 9)"], "17": ["-9"]},
+                stdout=[],
+            ),
+            C(
+                msg="_fakearray",
+                code=textwrap.dedent(
+                    """
+from pycomment.tests._fakearray import arange
+_  = arange(0, 9).reshape((3, 3))  # =>
+
+print('ZZ\U000f0000ZZ3:', repr(_), 'ZZ\U000f0000ZZ', sep='')
+                    """
+                ).strip(),
+                comments={
+                    "3": [
+                        "array([[0, 1, 2],",
+                        "       [3, 4, 5],",
+                        "       [6, 7, 8]])",
+                    ]
+                },
                 stdout=[],
             ),
         ]
@@ -105,4 +125,9 @@ print('ZZ\U000f0000ZZ17:', repr(_), 'ZZ\U000f0000ZZ', sep='')
             with self.subTest(msg=c.msg):
                 got = self._callFUT(c.code)
                 self.assertDictEqual(got.comments, c.comments)
-                self.assertEqual(got.stdout, c.stdout)
+                self.assertDiff(
+                    "\n".join(got.stdout),
+                    "\n".join(c.stdout),
+                    fromfile="got",
+                    tofile="want",
+                )

@@ -1,8 +1,12 @@
 import unittest
+import textwrap
 from collections import namedtuple
+from .testing import AssertDiffMixin
 
 
-class Tests(unittest.TestCase):
+class Tests(unittest.TestCase, AssertDiffMixin):
+    maxDiff = None
+
     def _callFUT(self, code: str, result_map, rest, out):
         from pycomment.emit import emit
         from io import StringIO
@@ -16,11 +20,78 @@ class Tests(unittest.TestCase):
         cases = [
             C(
                 msg="simplest",
-                code="""["hello", "bye"][0] + " world"  # => """,
-                comments={"1": repr("hello, world")},
+                code=textwrap.dedent(
+                    """
+                    ["hello", "bye"][0] + " world"  # => 
+                    """
+                ).strip(),
+                comments={"1": [repr("hello, world")]},
                 stdout=[],
-                want="""["hello", "bye"][0] + " world"  # => 'hello, world'""".strip(),
-            )
+                want=textwrap.dedent(
+                    """
+                    ["hello", "bye"][0] + " world"  # => 'hello, world'
+                    """
+                ).strip(),
+            ),
+            # todo: stdout
+            C(
+                msg="multi-line",
+                code=textwrap.dedent(
+                    """
+                    from pycomment.tests._fakearray import arange
+                    arange(9).reshape((3, 3))  # =>
+                    """
+                ).strip(),
+                comments={
+                    "2": [
+                        "array([[0, 1, 2],",
+                        "       [3, 4, 5],",
+                        "       [6, 7, 8]])",
+                    ]
+                },
+                stdout=[],
+                want=textwrap.dedent(
+                    """
+                    from pycomment.tests._fakearray import arange
+                    arange(9).reshape((3, 3))  # => multi-line..
+                    # array([[0, 1, 2],
+                    #        [3, 4, 5],
+                    #        [6, 7, 8]])
+                    # ..multi-line
+                    """
+                ).strip(),
+            ),
+            C(
+                msg="multi-line replace",
+                code=textwrap.dedent(
+                    """
+                    from pycomment.tests._fakearray import arange
+                    arange(9).reshape((3, 3))  # => multi-line..
+                    # array([[0, 1, 2],
+                    #        [3, 4, 5],
+                    #        [6, 7, 8]])
+                    # ..multi-line
+                    """
+                ).strip(),
+                comments={
+                    "2": [
+                        "array([[0, 1, 2],",
+                        "       [3, 4, 5],",
+                        "       [6, 7, 8]])",
+                    ]
+                },
+                stdout=[],
+                want=textwrap.dedent(
+                    """
+                    from pycomment.tests._fakearray import arange
+                    arange(9).reshape((3, 3))  # => multi-line..
+                    # array([[0, 1, 2],
+                    #        [3, 4, 5],
+                    #        [6, 7, 8]])
+                    # ..multi-line
+                    """
+                ).strip(),
+            ),
         ]
 
         for c in cases:
@@ -28,4 +99,4 @@ class Tests(unittest.TestCase):
                 o = StringIO()
                 self._callFUT(c.code, c.comments, c.stdout, out=o)
                 got = o.getvalue().strip()
-                self.assertEqual(got, c.want)
+                self.assertDiff(got, c.want, fromfile="got", tofile="want")
