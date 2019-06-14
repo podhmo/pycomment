@@ -25,7 +25,7 @@ class Tests(unittest.TestCase, AssertDiffMixin):
                     ["hello", "bye"][0] + " world"  # => 
                     """
                 ).strip(),
-                comments={"1": repr("hello, world")},
+                comments={"1": [repr("hello, world")]},
                 stdout=[],
                 want=textwrap.dedent(
                     """
@@ -47,7 +47,11 @@ class Tests(unittest.TestCase, AssertDiffMixin):
                     """
                 ).strip(),
                 comments={
-                    "2": "array([[0, 1, 2],\n       [3, 4, 5],\n       [6, 7, 8]])"
+                    "2": [
+                        "array([[0, 1, 2],",
+                        "       [3, 4, 5],",
+                        "       [6, 7, 8]])",
+                    ]
                 },
                 stdout=[],
                 want=textwrap.dedent(

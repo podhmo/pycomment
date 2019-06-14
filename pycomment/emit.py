@@ -7,7 +7,7 @@ from . import COMMENT_MARKER, STDOUT_HEADER_MARKER
 def emit(
     rf: t.Iterable[str],
     *,
-    result_map: t.Dict[str, str],
+    result_map: t.Dict[str, t.List[str]],
     rest: t.List[str],
     out: t.IO = sys.stdout
 ) -> None:
@@ -22,7 +22,7 @@ def emit(
         if m is None or k not in result_map:
             print(line, end="", file=out)
         else:
-            print(line[: m.start()] + COMMENT_MARKER, result_map[k], file=out)
+            print(line[: m.start()] + COMMENT_MARKER, "\n".join(result_map[k]), file=out)
             i += 1
 
     if rest:

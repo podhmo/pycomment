@@ -26,7 +26,7 @@ def capture(code: str, *, g: t.Optional[t.IO] = None):
             if line.endswith(SEP_MARKER):
                 reading = False
                 buf.append(line.rstrip(SEP_MARKER))
-                result_map[lineno] = "\n".join(buf)
+                result_map[lineno] = buf
             else:
                 buf.append(line)
         elif line.startswith(SEP_MARKER):
