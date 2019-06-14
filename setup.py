@@ -20,7 +20,7 @@ testing_extras = tests_require + []
 
 setup(
     name="pycomment",
-    version="0.0.4",
+    version="0.0.5",
     description="with repr value as comment",
     long_description=README + "\n\n" + CHANGES,
     classifiers=[

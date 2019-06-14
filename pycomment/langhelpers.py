@@ -1,3 +1,4 @@
+import itertools
 import typing as t
 
 # stolen from pyramid
