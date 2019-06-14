@@ -39,10 +39,16 @@ class Tests(unittest.TestCase, AssertDiffMixin):
                 code=textwrap.dedent(
                     """
                     from pycomment.tests._fakearray import arange
-                    arange(9).reshape((3, 3))  # => 
+                    arange(9).reshape((3, 3))  # => pycomment: multi-line..
+                    # array([[0, 1, 2],
+                    #        [3, 4, 5],
+                    #        [6, 7, 8]])
+                    # pycomment: ..multi-line
                     """
                 ).strip(),
-                comments={"2": repr("hello, world")},
+                comments={
+                    "2": "array([[0, 1, 2],\n       [3, 4, 5],\n       [6, 7, 8]])"
+                },
                 stdout=[],
                 want=textwrap.dedent(
                     """
