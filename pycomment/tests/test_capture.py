@@ -100,6 +100,21 @@ print('ZZ\U000f0000ZZ17:', repr(_), 'ZZ\U000f0000ZZ', sep='')
                 comments={"2": "9", "4": "81", "6": "(1, 81, 9)", "17": "-9"},
                 stdout=[],
             ),
+            C(
+                msg="_fakearray",
+                code=textwrap.dedent(
+                    """
+from pycomment.tests._fakearray import arange
+_  = arange(0, 9).reshape((3, 3))  # =>
+
+print('ZZ\U000f0000ZZ3:', repr(_), 'ZZ\U000f0000ZZ', sep='')
+                    """
+                ).strip(),
+                comments={
+                    "1": "array([[0, 1, 2],\n       [3, 4, 5],\n       [6, 7, 8]])\n"
+                },
+                stdout=[],
+            ),
         ]
         for c in cases:
             with self.subTest(msg=c.msg):
