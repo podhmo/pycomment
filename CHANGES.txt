@@ -1,5 +1,9 @@
+0.0.6
+
+- multi-line output with indentation (support completely)  (#14)
+
 0.0.4:
 
-- multi-line output suppor (#12)
+- multi-line output support (#12)
 - `-i` option is added, same as `--inplace` (#7)
 
