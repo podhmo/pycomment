@@ -32,10 +32,10 @@ def capture(code: str, *, g: t.Optional[t.IO] = None):
         elif line.startswith(SEP_MARKER):
             reading = True
             lineno, line = line.lstrip(SEP_MARKER).split(":", 1)
-            buf = [line]
+            buf = [line.rstrip(SEP_MARKER)]
             if line.endswith(SEP_MARKER):
                 reading = False
-                result_map[lineno] = buf[0].rstrip(SEP_MARKER)
+                result_map[lineno] = buf
         else:
             rest.append(line)
     return CaptureResult(comments=result_map, stdout=rest)

@@ -21,7 +21,7 @@ _ = ["hello", "bye"][0] + " world"  # => "hello world"
 print('ZZ\U000f0000ZZ1:', repr(_), 'ZZ\U000f0000ZZ', sep='')
                     """
                 ).strip(),
-                comments={"1": repr("hello world")},
+                comments={"1": [repr("hello world")]},
                 stdout=[],
             ),
             C(

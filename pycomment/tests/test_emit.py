@@ -39,11 +39,7 @@ class Tests(unittest.TestCase, AssertDiffMixin):
                 code=textwrap.dedent(
                     """
                     from pycomment.tests._fakearray import arange
-                    arange(9).reshape((3, 3))  # => pycomment: multi-line..
-                    # array([[0, 1, 2],
-                    #        [3, 4, 5],
-                    #        [6, 7, 8]])
-                    # pycomment: ..multi-line
+                    arange(9).reshape((3, 3))  # =>
                     """
                 ).strip(),
                 comments={
@@ -57,7 +53,42 @@ class Tests(unittest.TestCase, AssertDiffMixin):
                 want=textwrap.dedent(
                     """
                     from pycomment.tests._fakearray import arange
-                    arange(9).reshape((3, 3))  # =>
+                    arange(9).reshape((3, 3))  # => multi-line..
+                    # array([[0, 1, 2],
+                    #        [3, 4, 5],
+                    #        [6, 7, 8]])
+                    # ..multi-line
+                    """
+                ).strip(),
+            ),
+            C(
+                msg="multi-line replace",
+                code=textwrap.dedent(
+                    """
+                    from pycomment.tests._fakearray import arange
+                    arange(9).reshape((3, 3))  # => multi-line..
+                    # array([[0, 1, 2],
+                    #        [3, 4, 5],
+                    #        [6, 7, 8]])
+                    # ..multi-line
+                    """
+                ).strip(),
+                comments={
+                    "2": [
+                        "array([[0, 1, 2],",
+                        "       [3, 4, 5],",
+                        "       [6, 7, 8]])",
+                    ]
+                },
+                stdout=[],
+                want=textwrap.dedent(
+                    """
+                    from pycomment.tests._fakearray import arange
+                    arange(9).reshape((3, 3))  # => multi-line..
+                    # array([[0, 1, 2],
+                    #        [3, 4, 5],
+                    #        [6, 7, 8]])
+                    # ..multi-line
                     """
                 ).strip(),
             ),
