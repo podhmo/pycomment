@@ -92,6 +92,37 @@ class Tests(unittest.TestCase, AssertDiffMixin):
                     """
                 ).strip(),
             ),
+            C(
+                msg="multi-line with indent",
+                code=textwrap.dedent(
+                    """
+                    def run():
+                        from pycomment.tests._fakearray import arange
+                        arange(9).reshape((3, 3))  # =>
+                    run()
+                    """
+                ).strip(),
+                comments={
+                    "3": [
+                        "array([[0, 1, 2],",
+                        "       [3, 4, 5],",
+                        "       [6, 7, 8]])",
+                    ]
+                },
+                stdout=[],
+                want=textwrap.dedent(
+                    """
+                    def run():
+                        from pycomment.tests._fakearray import arange
+                        arange(9).reshape((3, 3))  # => multi-line..
+                        # array([[0, 1, 2],
+                        #        [3, 4, 5],
+                        #        [6, 7, 8]])
+                        # ..multi-line
+                    run()
+                    """
+                ).strip(),
+            ),
         ]
 
         for c in cases:
