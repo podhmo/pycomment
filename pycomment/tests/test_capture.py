@@ -1,9 +1,10 @@
 import unittest
 import textwrap
 from collections import namedtuple
+from .testing import AssertDiffMixin
 
 
-class Tests(unittest.TestCase):
+class Tests(unittest.TestCase, AssertDiffMixin):
     def _callFUT(self, code):
         from pycomment.capture import capture
 
@@ -120,4 +121,9 @@ print('ZZ\U000f0000ZZ3:', repr(_), 'ZZ\U000f0000ZZ', sep='')
             with self.subTest(msg=c.msg):
                 got = self._callFUT(c.code)
                 self.assertDictEqual(got.comments, c.comments)
-                self.assertEqual(got.stdout, c.stdout)
+                self.assertDiff(
+                    "\n".join(got.stdout),
+                    "\n".join(c.stdout),
+                    fromfile="got",
+                    tofile="want",
+                )
