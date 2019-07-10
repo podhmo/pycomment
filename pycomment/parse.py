@@ -52,7 +52,13 @@ class PyTreeVisitor:
             method = "visit_{0}".format(node_name(node))
 
             self.level += 1
-            logger.debug("%s%s (prefix=%r)", "  " * self.level, method, node.prefix)
+            logger.debug(
+                "%s%s (prefix=%r, value=%r)",
+                "  " * self.level,
+                method,
+                node.prefix,
+                getattr(node, "value", None),
+            )
 
             if hasattr(self, method):
                 # Found a specific visitor for this node
