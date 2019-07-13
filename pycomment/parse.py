@@ -39,10 +39,21 @@ def node_name(node):
         return pygram.python_grammar.number2symbol[node.type]
 
 
+def node_value(node):
+    if node_name(node) == "NAME":
+        return repr(node)
+    else:
+        return "..."
+
+
 type_repr = pytree.type_repr
 
 
 class PyTreeVisitor:
+    @reify
+    def logger(self):
+        return logger
+
     @reify
     def level(self) -> int:
         return 0
@@ -52,12 +63,13 @@ class PyTreeVisitor:
             method = "visit_{0}".format(node_name(node))
 
             self.level += 1
-            logger.debug(
-                "%s%s (prefix=%r, value=%r)",
+            self.logger.debug(
+                "%s%s (prefix=%r, value=%r, type=%r)",
                 "  " * self.level,
                 method,
                 node.prefix,
                 getattr(node, "value", None),
+                node.type,
             )
 
             if hasattr(self, method):
