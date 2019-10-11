@@ -19,7 +19,7 @@ def _exec_in_tempfile(code: str, *, g: t.Optional[dict] = None) -> None:
     with tempfile.NamedTemporaryFile("w+") as f:
         print(code, file=f)
         f.seek(0)
-        runpy.run_path(f.name)
+        runpy.run_path(f.name, init_globals=g)
 
 
 def capture(code: str, *, g: t.Optional[dict] = None, _exec=_exec_in_tempfile):
