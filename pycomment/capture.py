@@ -16,7 +16,7 @@ def _exec_in_tempfile(code: str, *, g: t.Optional[dict] = None) -> None:
     import runpy
     import tempfile
 
-    with tempfile.NamedTemporaryFile("w+") as f:
+    with tempfile.NamedTemporaryFile("w+", suffix=".py") as f:
         print(code, file=f)
         f.seek(0)
         runpy.run_path(f.name, init_globals=g)
