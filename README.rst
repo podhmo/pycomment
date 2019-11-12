@@ -10,8 +10,6 @@ This is heavily inspired by xmpfilter of ruby's `rocodetools <https://github.com
 install
 ----------------------------------------
 
-warning: in the future (not yet)
-
 .. code-block:: console
 
   $ pip install pycomment
