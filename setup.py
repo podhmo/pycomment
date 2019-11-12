@@ -20,7 +20,7 @@ testing_extras = tests_require + []
 
 setup(
     name="pycomment",
-    version="0.0.6",
+    version=open(os.path.join(here, "VERSION")).read().strip(),
     description="with repr value as comment",
     long_description=README + "\n\n" + CHANGES,
     classifiers=[

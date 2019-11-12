@@ -1,3 +1,7 @@
+0.1.0
+
+- exec in tempfile, so more robust (#17)
+
 0.0.6
 
 - multi-line output with indentation (support completely)  (#14)
@@ -6,4 +10,3 @@
 
 - multi-line output support (#12)
 - `-i` option is added, same as `--inplace` (#7)
-
