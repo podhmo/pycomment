@@ -7,11 +7,26 @@ from . import SEP_MARKER
 CaptureResult = namedtuple("CaptureResult", "comments, stdout")
 
 
-def capture(code: str, *, g: t.Optional[t.IO] = None):
+def _exec_self(code: str, *, g: t.Optional[dict] = None) -> dict:
+    g = g or {"__name__": "exec"}
+    exec(code, g)
+    return g
+
+
+def _exec_in_tempfile(code: str, *, g: t.Optional[dict] = None) -> dict:
+    import runpy
+    import tempfile
+
+    with tempfile.NamedTemporaryFile("w+", suffix=".py") as f:
+        print(code, file=f)
+        f.seek(0)
+        return runpy.run_path(f.name, init_globals=g)
+
+
+def capture(code: str, *, g: t.Optional[dict] = None, _exec=_exec_in_tempfile):
     o = StringIO()
     with contextlib.redirect_stdout(o):
-        g = g or {"__name__": "exec"}
-        exec(code, g)
+        g = _exec(code, g=g)
 
     result_map = {}
     rest = []
