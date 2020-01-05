@@ -1,7 +1,8 @@
 test:
 	python setup.py test
 ci:
-	$(MAKE) test lint
+	$(MAKE) test lint examples
+	git diff
 
 format:
 #	pip install -e .[dev]
@@ -16,6 +17,7 @@ lint:
 # 	mypy --strict --strict-equality --ignore-missing-imports pycomment
 
 examples:
+	pip install numpy
 	$(MAKE) -C examples
 
 build:
