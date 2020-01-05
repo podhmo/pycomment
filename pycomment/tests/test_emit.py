@@ -22,7 +22,7 @@ class Tests(unittest.TestCase, AssertDiffMixin):
                 msg="simplest",
                 code=textwrap.dedent(
                     """
-                    ["hello", "bye"][0] + " world"  # => 
+                    ["hello", "bye"][0] + " world"  # =>
                     """
                 ).strip(),
                 comments={"1": [repr("hello, world")]},
