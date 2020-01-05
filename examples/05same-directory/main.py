@@ -1,2 +1,2 @@
 import model
-model.Person().say() # =>
+model.Person().say() # => 'hello'
