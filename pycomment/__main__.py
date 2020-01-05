@@ -6,7 +6,7 @@ from pycomment.emit import emit
 
 def run(sourcefile, out=sys.stdout, g=None):
     code = str(transform_file(sourcefile))
-    capture_result = capture(code, g=g)
+    capture_result = capture(code, g=g, filename=sourcefile)
 
     with open(sourcefile) as rf:
         emit(
