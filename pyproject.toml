@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pycomment"
+description = "with repr value as comment"
+authors = [
+    { name = "podhmo", email = "ababjam61+github@gmail.com" },
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+# The version and readme are loaded dynamically from other files.
+dynamic = ["version", "readme"]
+
+[project.urls]
+Homepage = "https://github.com/podhmo/pycomment"
+Repository = "https://github.com/podhmo/pycomment"
+
+[project.scripts]
+pycomment = "pycomment.__main__:main"
+
+# Optional dependencies for development, testing, and handling examples.
+# Install groups using: pip install -e '.[dev,testing,examples]'
+[project.optional-dependencies]
+dev = [
+    "black",      # Code formatter
+    "flake8",     # Linter
+    "build",      # For building the package (PEP 517)
+    "twine",      # For uploading to PyPI
+]
+testing = [
+    "pytest",     # Test runner
+]
+examples = [
+    "numpy",      # Dependency for the examples
+]
+
+[tool.setuptools]
+# This is equivalent to `include_package_data=True` in setup.py
+include-package-data = true
+
+[tool.setuptools.dynamic]
+# Read the version from the VERSION file
+version = { file = "VERSION" }
+# Concatenate README.rst and CHANGES.txt for the long description on PyPI
+readme = { file = ["README.rst", "CHANGES.txt"], content-type = "text/x-rst" }
+
+[tool.setuptools.packages.find]
+# This is equivalent to `find_packages(exclude=["pycomment.tests"])`
+exclude = ["pycomment.tests*"]
