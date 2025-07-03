@@ -1,32 +1,33 @@
+# To install all development dependencies, run:
+# pip install -e ".[dev,testing,examples]"
+
 test:
-	python setup.py test
-ci:
-	$(MAKE) test lint examples
-	git diff
+	pytest
+
+ci: test lint examples
+	# Check if there are any uncommitted changes after running tests/linting
+	git diff --exit-code
 
 format:
-#	pip install -e .[dev]
-	black pycomment setup.py
+	black pycomment
 
 lint:
-#	pip install -e .[dev]
 	flake8 pycomment --ignore W503,E203,E501
 
 # typing:
-# #	pip install -e .[dev]
-# 	mypy --strict --strict-equality --ignore-missing-imports pycomment
+#	mypy --strict --strict-equality --ignore-missing-imports pycomment
 
 examples:
-	pip install numpy
+	# This assumes that the 'examples' directory contains its own Makefile
 	$(MAKE) -C examples
 
 build:
-#	pip install wheel
-	python setup.py bdist_wheel
+	# Clean previous builds and build sdist and wheel
+	rm -rf dist/
+	python -m build
 
-upload:
-#	pip install twine
-	twine check dist/pycomment-$(shell cat VERSION)*
-	twine upload dist/pycomment-$(shell cat VERSION)*
+upload: build
+	twine check dist/*
+	twine upload dist/*
 
-.PHONY: test format lint build upload examples typing
+.PHONY: test ci format lint typing examples build upload
