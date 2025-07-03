@@ -1,4 +1,4 @@
-[![Travis CI](https://travis-ci.org/podhmo/pycomment.svg?branch=master)](https://travis-ci.org/podhmo/pycomment)
+[![Python application test with Pytest](https://github.com/podhmo/pycomment/actions/workflows/python-package/badge.svg)](https://github.com/podhmo/pycomment/actions)
 
 # pycomment
 
