@@ -46,7 +46,7 @@ include-package-data = true
 # Read the version from the VERSION file
 version = { file = "VERSION" }
 # Concatenate README.rst and CHANGES.txt for the long description on PyPI
-readme = { file = ["README.rst", "CHANGES.txt"], content-type = "text/x-rst" }
+readme = { file = ["README.md", "CHANGES.txt"], content-type = "text/markdown" }
 
 [tool.setuptools.packages.find]
 # This is equivalent to `find_packages(exclude=["pycomment.tests"])`
