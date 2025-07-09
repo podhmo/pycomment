@@ -20,6 +20,5 @@ lint:
 
 # Run all CI checks
 ci:
-	hatch run ci
 	$(MAKE) -C examples
 	git diff

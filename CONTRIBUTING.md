@@ -52,6 +52,7 @@ Once you are inside the `hatch shell`, you can use the following commands define
     This command runs tests, formatting checks, and linting, simulating what happens in our CI pipeline.
     ```bash
     hatch run ci
+    make ci  # re-generate ./examples 's output
     ```
 
 Thank you for your contributions!
