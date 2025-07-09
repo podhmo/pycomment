@@ -20,5 +20,6 @@ lint:
 
 # Run all CI checks
 ci:
-	@echo "--> Running all CI checks..."
-	@hatch run ci
+	hatch run ci
+	$(MAKE) -C examples
+	git diff
