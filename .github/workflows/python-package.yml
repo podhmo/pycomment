@@ -32,4 +32,6 @@ jobs:
         hatch run ci
     - name: e2e tests
       run: |
+        hatch env create
+        . "$(hatch env find)/bin/activate"
         make ci
