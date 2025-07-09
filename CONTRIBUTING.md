@@ -30,6 +30,11 @@ Once you are inside the `hatch shell`, you can use the following commands define
     ```bash
     hatch test
     ```
+    If you want to test with all python versions:
+    ```bash
+    hatch test --all
+    ```
+
 
 *   **Format the code:**
     We use `black` for code formatting. To apply formatting, run:

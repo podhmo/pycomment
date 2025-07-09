@@ -9,10 +9,11 @@ readme = "README.md"
 authors = [
     { name = "podhmo", email = "ababjam61+github@gmail.com" },
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -32,27 +33,42 @@ pycomment = "pycomment.__main__:main"
 [tool.hatch.version]
 path = "pycomment/__version__.py"
 
+# Default environment for `hatch shell`
 [tool.hatch.envs.default]
 dependencies = [
   "pytest",
-  "numpy", # For examples
+  "numpy",
   "black",
   "flake8",
 ]
 
+# Default tests options for pytest
+[tool.hatch.envs.hatch-test]
+default-args = ["pycomment/tests"]
+
+
+# Scripts for the default environment, runnable with `hatch run <script>`
 [tool.hatch.envs.default.scripts]
-# Run tests
-test = "pytest"
+# Format code using black
+format = "black pycomment pycomment/tests"
 
-# Format code with black
-format = "black pycomment"
+# Lint code using flake8
+lint = "flake8 pycomment pycomment/tests --ignore W503,E203,E501"
 
-# Lint code with flake8
-lint = "flake8 pycomment --ignore W503,E203,E501"
-
-# Run all CI checks: test, format check, and lint
+# Run all CI checks: matrix tests, format check, and lint
 ci = [
-  "test",
-  "format --check",
-  "lint",
+  "hatch test",
+  "hatch run format --check",
+  "hatch run lint",
 ]
+
+# Environment for `hatch test`
+[tool.hatch.envs.test]
+dependencies = [
+  "pytest",
+]
+
+# Define a testing matrix for all supported Python versions
+[[tool.hatch.envs.test.matrix]]
+python = ["3.9", "3.10", "3.11", "3.12"]
+
