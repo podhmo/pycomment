@@ -8,7 +8,10 @@ CaptureResult = namedtuple("CaptureResult", "comments, stdout")
 
 
 def _exec_self(
-    code: str, *, g: t.Optional[dict] = None, filename: t.Optional[str] = None,
+    code: str,
+    *,
+    g: t.Optional[dict] = None,
+    filename: t.Optional[str] = None,
 ) -> dict:
     g = g or {"__name__": "exec"}
     exec(code, g)
@@ -16,7 +19,10 @@ def _exec_self(
 
 
 def _exec_in_tempfile(
-    code: str, *, g: t.Optional[dict] = None, filename: t.Optional[str] = None,
+    code: str,
+    *,
+    g: t.Optional[dict] = None,
+    filename: t.Optional[str] = None,
 ) -> dict:
     import runpy
     import tempfile
@@ -39,7 +45,9 @@ def _exec_in_tempfile(
         f = tempfile.NamedTemporaryFile(
             mode="w", suffix=".py", dir=dirpath, delete=False, encoding="utf-8"
         )
-        s.callback(os.unlink, f.name)  # Register cleanup function to delete the file on exit.
+        s.callback(
+            os.unlink, f.name
+        )  # Register cleanup function to delete the file on exit.
 
         f.write(code)
         f.close()  # Close the file, so runpy can open it without a permission error.
