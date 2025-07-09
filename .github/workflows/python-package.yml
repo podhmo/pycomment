@@ -34,4 +34,5 @@ jobs:
       run: |
         hatch env create
         . "$(hatch env find)/bin/activate"
+        python -V
         make ci
