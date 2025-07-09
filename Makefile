@@ -1,33 +1,24 @@
-# To install all development dependencies, run:
-# pip install -e ".[dev,testing,examples]"
+# Makefile for project shortcuts using Hatch.
+# To set up the development environment, run `hatch shell`.
 
+.PHONY: test format lint ci
+
+# Run tests using the 'test' script defined in pyproject.toml
 test:
-	pytest
+	@echo "--> Running tests..."
+	@hatch test
 
-ci: test lint examples
-	# Check if there are any uncommitted changes after running tests/linting
-	git diff --exit-code
-
+# Format code using the 'format' script
 format:
-	black pycomment
+	@echo "--> Formatting code..."
+	@hatch run format
 
+# Lint code using the 'lint' script
 lint:
-	flake8 pycomment --ignore W503,E203,E501
+	@echo "--> Linting code..."
+	@hatch run lint
 
-# typing:
-#	mypy --strict --strict-equality --ignore-missing-imports pycomment
-
-examples:
-	# This assumes that the 'examples' directory contains its own Makefile
-	$(MAKE) -C examples
-
-build:
-	# Clean previous builds and build sdist and wheel
-	rm -rf dist/
-	python -m build
-
-upload: build
-	twine check dist/*
-	twine upload dist/*
-
-.PHONY: test ci format lint typing examples build upload
+# Run all CI checks
+ci:
+	@echo "--> Running all CI checks..."
+	@hatch run ci

@@ -1,19 +1,27 @@
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "pycomment"
 description = "with repr value as comment"
+readme = "README.md"
 authors = [
     { name = "podhmo", email = "ababjam61+github@gmail.com" },
 ]
+requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
 ]
-# The version and readme are loaded dynamically from other files.
-dynamic = ["version", "readme"]
+# Version is loaded dynamically from pycomment/__version__.py
+dynamic = ["version"]
 
 [project.urls]
 Homepage = "https://github.com/podhmo/pycomment"
@@ -22,32 +30,30 @@ Repository = "https://github.com/podhmo/pycomment"
 [project.scripts]
 pycomment = "pycomment.__main__:main"
 
-# Optional dependencies for development, testing, and handling examples.
-# Install groups using: pip install -e '.[dev,testing,examples]'
-[project.optional-dependencies]
-dev = [
-    "black",      # Code formatter
-    "flake8",     # Linter
-    "build",      # For building the package (PEP 517)
-    "twine",      # For uploading to PyPI
-]
-testing = [
-    "pytest",     # Test runner
-]
-examples = [
-    "numpy",      # Dependency for the examples
+[tool.hatch.version]
+path = "pycomment/__version__.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "pytest",
+  "numpy", # For examples
+  "black",
+  "flake8",
 ]
 
-[tool.setuptools]
-# This is equivalent to `include_package_data=True` in setup.py
-include-package-data = true
+[tool.hatch.envs.default.scripts]
+# Run tests
+test = "pytest"
 
-[tool.setuptools.dynamic]
-# Read the version from the VERSION file
-version = { file = "VERSION" }
-# Concatenate README.rst and CHANGES.txt for the long description on PyPI
-readme = { file = ["README.md", "CHANGES.txt"], content-type = "text/markdown" }
+# Format code with black
+format = "black pycomment"
 
-[tool.setuptools.packages.find]
-# This is equivalent to `find_packages(exclude=["pycomment.tests"])`
-exclude = ["pycomment.tests*"]
+# Lint code with flake8
+lint = "flake8 pycomment --ignore W503,E203,E501"
+
+# Run all CI checks: test, format check, and lint
+ci = [
+  "test",
+  "format --check",
+  "lint",
+]
