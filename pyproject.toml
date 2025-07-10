@@ -38,13 +38,7 @@ dependencies = [
   "pytest",
   "black",
   "flake8",
-  "numpy",  # for ./examples
 ]
-
-# Default tests options for pytest
-[tool.hatch.envs.hatch-test]
-default-args = ["pycomment/tests"]
-
 
 # Scripts for the default environment, runnable with `hatch run <script>`
 [tool.hatch.envs.default.scripts]
@@ -61,13 +55,20 @@ ci = [
   "hatch run lint",
 ]
 
-# Environment for `hatch test`
-[tool.hatch.envs.test]
+# Default tests options for pytest
+[tool.hatch.envs.hatch-test]
 dependencies = [
   "pytest",
 ]
+default-args = ["pycomment/tests"]
 
-# Define a testing matrix for all supported Python versions
-[[tool.hatch.envs.test.matrix]]
+[[tool.hatch.envs.hatch-test.matrix]]
 python = ["3.9", "3.10", "3.11", "3.12"]
 
+# e2e env
+[tool.hatch.envs.e2e]
+dependencies = [
+  "numpy" # for ./examples
+]
+[[tool.hatch.envs.e2e.matrix]]
+python = ["3.9", "3.10", "3.11", "3.12"]

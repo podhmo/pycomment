@@ -3,6 +3,9 @@
 
 .PHONY: test format lint ci
 
+PYTHON_VERSION ?= 3.11
+
+
 # Run tests using the 'test' script defined in pyproject.toml
 test:
 	@echo "--> Running tests..."
@@ -20,5 +23,6 @@ lint:
 
 # Run all CI checks
 ci:
-	$(MAKE) -C examples
+	$(shell hatch env create e2e.py${PYTHON_VERSION})
+	source "$(shell hatch env find e2e.py${PYTHON_VERSION})/bin/activate" && $(MAKE) -C examples
 	git diff
