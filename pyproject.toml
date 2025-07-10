@@ -9,14 +9,14 @@ readme = "README.md"
 authors = [
     { name = "podhmo", email = "ababjam61+github@gmail.com" },
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: Implementation :: CPython",
 ]
 # Version is loaded dynamically from pycomment/__version__.py
@@ -63,7 +63,7 @@ dependencies = [
 default-args = ["pycomment/tests"]
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.9", "3.10", "3.11", "3.12"]
+python = ["3.10", "3.11", "3.12", "3.13"]
 
 # e2e env
 [tool.hatch.envs.e2e]
@@ -71,4 +71,4 @@ dependencies = [
   "numpy" # for ./examples
 ]
 [[tool.hatch.envs.e2e.matrix]]
-python = ["3.9", "3.10", "3.11", "3.12"]
+python = ["3.10", "3.11", "3.12", "3.13"]
