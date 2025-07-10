@@ -1,4 +1,4 @@
-default: 00 01 02 03 04 05
+default: 00 01 02 03 04 05 06
 
 OPTS ?= --logging=DEBUG
 
@@ -14,3 +14,5 @@ OPTS ?= --logging=DEBUG
 	pycomment ${OPTS} --inplace 04*.py
 05:
 	pycomment ${OPTS} --inplace 05*/main.py
+06:
+	pycomment ${OPTS} 06*.py > replaced.06,py
