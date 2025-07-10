@@ -1,3 +1,8 @@
+0.2.0
+ 
+- use black's blib2to3 module instead of lib2to3, since lib2to3 module was removed in 3.13 (#30)
+- fixed bugs on windows (#26)
+
 0.1.0
 
 - exec in tempfile, so more robust (#17)
