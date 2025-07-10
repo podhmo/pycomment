@@ -15,4 +15,4 @@ OPTS ?= --logging=DEBUG
 05:
 	pycomment ${OPTS} --inplace 05*/main.py
 06:
-	pycomment ${OPTS} 06*.py > replaced.06,py
+	pycomment ${OPTS} 06*.py > replaced.06.py
