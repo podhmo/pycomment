@@ -21,6 +21,10 @@ classifiers = [
 ]
 # Version is loaded dynamically from pycomment/__version__.py
 dynamic = ["version"]
+dependencies = [
+  "black"
+]
+
 
 [project.urls]
 Homepage = "https://github.com/podhmo/pycomment"
@@ -36,7 +40,6 @@ path = "pycomment/__version__.py"
 [tool.hatch.envs.default]
 dependencies = [
   "pytest",
-  "black",
   "flake8",
 ]
 
