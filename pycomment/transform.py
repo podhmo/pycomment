@@ -1,12 +1,12 @@
 from pycomment.parse import parse_string, PyTreeVisitor, type_repr
-from lib2to3.pgen2 import token
-from lib2to3.fixer_util import Assign, Name, Newline
+from blib2to3.pgen2 import token
+from blib2to3.fixer_util import Assign, Name, Newline
 from . import SEP_MARKER, COMMENT_MARKER
 
 
 def transform_string(source: str):
     # Ensure the source code ends with a newline character.
-    # The lib2to3 parser expects it, otherwise it can raise a ParseError
+    # The blib2to3 parser expects it, otherwise it can raise a ParseError
     # for files that don't end with a newline.
     if not source.endswith("\n"):
         source += "\n"
