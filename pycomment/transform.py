@@ -15,7 +15,7 @@ def transform_string(source: str):
 
 
 def transform_file(fname: str):
-    with open(fname, "r", encoding="utf-8") as rf:
+    with open(fname, "r") as rf:
         return transform_string(rf.read())
 
 
