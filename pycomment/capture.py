@@ -8,7 +8,10 @@ CaptureResult = namedtuple("CaptureResult", "comments, stdout")
 
 
 def _exec_self(
-    code: str, *, g: t.Optional[dict] = None, filename: t.Optional[str] = None,
+    code: str,
+    *,
+    g: t.Optional[dict] = None,
+    filename: t.Optional[str] = None,
 ) -> dict:
     g = g or {"__name__": "exec"}
     exec(code, g)
@@ -16,23 +19,40 @@ def _exec_self(
 
 
 def _exec_in_tempfile(
-    code: str, *, g: t.Optional[dict] = None, filename: t.Optional[str] = None,
+    code: str,
+    *,
+    g: t.Optional[dict] = None,
+    filename: t.Optional[str] = None,
 ) -> dict:
     import runpy
     import tempfile
-    import os.path
+    import os
     import sys
 
     with contextlib.ExitStack() as s:
         dirpath = None
-        if filename is not None:
+        if filename:
             dirpath = os.path.dirname(os.path.abspath(filename))
-            sys.path.insert(0, dirpath)
-            s.callback(lambda: sys.path.pop(0))
-        with tempfile.NamedTemporaryFile("w+", suffix=".py", dir=dirpath) as f:
-            print(code, file=f)
-            f.seek(0)
-            return runpy.run_path(f.name, init_globals=g)
+            # Add the source file's directory to sys.path to handle relative imports.
+            if dirpath not in sys.path:
+                sys.path.insert(0, dirpath)
+                s.callback(sys.path.pop, 0)
+
+        # On Windows, a file opened by one process cannot be accessed by another.
+        # To work around this, create a temporary file with delete=False,
+        # write to it, close it, and then pass its name to runpy.run_path.
+        # The file is cleaned up reliably using ExitStack.
+        f = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", dir=dirpath, delete=False, encoding="utf-8"
+        )
+        s.callback(
+            os.unlink, f.name
+        )  # Register cleanup function to delete the file on exit.
+
+        f.write(code)
+        f.close()  # Close the file, so runpy can open it without a permission error.
+
+        return runpy.run_path(f.name, init_globals=g)
 
 
 def capture(

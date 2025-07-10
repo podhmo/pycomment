@@ -5,12 +5,17 @@ from . import SEP_MARKER, COMMENT_MARKER
 
 
 def transform_string(source: str):
+    # Ensure the source code ends with a newline character.
+    # The lib2to3 parser expects it, otherwise it can raise a ParseError
+    # for files that don't end with a newline.
+    if not source.endswith("\n"):
+        source += "\n"
     t = parse_string(source)
     return transform(t)
 
 
 def transform_file(fname: str):
-    with open(fname) as rf:
+    with open(fname, "r") as rf:
         return transform_string(rf.read())
 
 
