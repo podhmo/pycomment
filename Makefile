@@ -3,9 +3,6 @@
 
 .PHONY: test format lint ci
 
-PYTHON_VERSION ?= 3.11
-
-
 # Run tests using the 'test' script defined in pyproject.toml
 test:
 	@echo "--> Running tests..."
@@ -21,7 +18,7 @@ lint:
 	@echo "--> Linting code..."
 	@hatch run lint
 
-# Run all CI checks
+# Run all CI checks (need hatch shell e2e.py3.12)
 ci:
 	$(MAKE) -C examples
 	git diff
