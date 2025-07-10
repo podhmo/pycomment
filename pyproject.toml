@@ -1,19 +1,26 @@
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "pycomment"
 description = "with repr value as comment"
+readme = "README.md"
 authors = [
     { name = "podhmo", email = "ababjam61+github@gmail.com" },
 ]
+requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
 ]
-# The version and readme are loaded dynamically from other files.
-dynamic = ["version", "readme"]
+# Version is loaded dynamically from pycomment/__version__.py
+dynamic = ["version"]
 
 [project.urls]
 Homepage = "https://github.com/podhmo/pycomment"
@@ -22,32 +29,46 @@ Repository = "https://github.com/podhmo/pycomment"
 [project.scripts]
 pycomment = "pycomment.__main__:main"
 
-# Optional dependencies for development, testing, and handling examples.
-# Install groups using: pip install -e '.[dev,testing,examples]'
-[project.optional-dependencies]
-dev = [
-    "black",      # Code formatter
-    "flake8",     # Linter
-    "build",      # For building the package (PEP 517)
-    "twine",      # For uploading to PyPI
-]
-testing = [
-    "pytest",     # Test runner
-]
-examples = [
-    "numpy",      # Dependency for the examples
+[tool.hatch.version]
+path = "pycomment/__version__.py"
+
+# Default environment for `hatch shell`
+[tool.hatch.envs.default]
+dependencies = [
+  "pytest",
+  "black",
+  "flake8",
 ]
 
-[tool.setuptools]
-# This is equivalent to `include_package_data=True` in setup.py
-include-package-data = true
+# Scripts for the default environment, runnable with `hatch run <script>`
+[tool.hatch.envs.default.scripts]
+# Format code using black
+format = "black pycomment pycomment/tests"
 
-[tool.setuptools.dynamic]
-# Read the version from the VERSION file
-version = { file = "VERSION" }
-# Concatenate README.rst and CHANGES.txt for the long description on PyPI
-readme = { file = ["README.md", "CHANGES.txt"], content-type = "text/markdown" }
+# Lint code using flake8
+lint = "flake8 pycomment pycomment/tests --ignore W503,E203,E501"
 
-[tool.setuptools.packages.find]
-# This is equivalent to `find_packages(exclude=["pycomment.tests"])`
-exclude = ["pycomment.tests*"]
+# Run all CI checks: matrix tests, format check, and lint
+ci = [
+  "hatch test",
+  "hatch run format --check",
+  "hatch run lint",
+]
+
+# Default tests options for pytest
+[tool.hatch.envs.hatch-test]
+dependencies = [
+  "pytest",
+]
+default-args = ["pycomment/tests"]
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.9", "3.10", "3.11", "3.12"]
+
+# e2e env
+[tool.hatch.envs.e2e]
+dependencies = [
+  "numpy" # for ./examples
+]
+[[tool.hatch.envs.e2e.matrix]]
+python = ["3.9", "3.10", "3.11", "3.12"]
