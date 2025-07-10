@@ -9,9 +9,12 @@ from .langhelpers import reify
 logger = logging.getLogger(__name__)
 null_logger = logging.getLogger("_null")
 null_logger.setLevel(logging.CRITICAL)
+
+if not hasattr(pygram, "python_grammar"):
+    pygram.initialize()
+
 default_driver = driver.Driver(
-    pygram.python_grammar_no_print_statement,
-    convert=pytree.convert,
+    pygram.python_grammar,
     logger=null_logger,  # suppress default lib2.pgen2.driver's logging
 )
 

@@ -1,7 +1,8 @@
 from pycomment.parse import parse_string, PyTreeVisitor, type_repr
 from blib2to3.pgen2 import token
-from blib2to3.fixer_util import Assign, Name, Newline
 from . import SEP_MARKER, COMMENT_MARKER
+from ._fixer_util import Assign, Name, Newline
+
 
 
 def transform_string(source: str):
