@@ -23,6 +23,5 @@ lint:
 
 # Run all CI checks
 ci:
-	$(shell hatch env create e2e.py${PYTHON_VERSION})
-	source "$(shell hatch env find e2e.py${PYTHON_VERSION})/bin/activate" && $(MAKE) -C examples
+	$(MAKE) -C examples
 	git diff

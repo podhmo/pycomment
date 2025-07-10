@@ -20,9 +20,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        cache: "pip"
     - name: Install Hatch
       uses: pypa/hatch@install
     - name: Install make
@@ -32,7 +33,7 @@ jobs:
         hatch run ci
     - name: e2e tests
       run: |
-        hatch env create
-        . "$(hatch env find)/bin/activate"
+        hatch env create "e2e.py${{ matrix.python-version }}"
+        . "$(hatch env find "e2e.py${{ matrix.python-version }}")/bin/activate"
         python -V
         make ci
