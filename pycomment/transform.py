@@ -4,7 +4,6 @@ from . import SEP_MARKER, COMMENT_MARKER
 from ._fixer_util import Assign, Name, Newline
 
 
-
 def transform_string(source: str):
     # Ensure the source code ends with a newline character.
     # The blib2to3 parser expects it, otherwise it can raise a ParseError
