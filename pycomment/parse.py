@@ -1,17 +1,20 @@
-from lib2to3 import pytree
-from lib2to3 import pygram
-from lib2to3.pgen2 import driver
-from lib2to3.pgen2 import token
-from lib2to3.pgen2.parse import ParseError
+from blib2to3 import pytree
+from blib2to3 import pygram
+from blib2to3.pgen2 import driver
+from blib2to3.pgen2 import token
+from blib2to3.pgen2.parse import ParseError
 import logging
 from .langhelpers import reify
 
 logger = logging.getLogger(__name__)
 null_logger = logging.getLogger("_null")
 null_logger.setLevel(logging.CRITICAL)
+
+if not hasattr(pygram, "python_grammar"):
+    pygram.initialize()
+
 default_driver = driver.Driver(
-    pygram.python_grammar_no_print_statement,
-    convert=pytree.convert,
+    pygram.python_grammar,
     logger=null_logger,  # suppress default lib2.pgen2.driver's logging
 )
 
