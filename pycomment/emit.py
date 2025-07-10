@@ -48,6 +48,9 @@ def emit(
             i += 1
 
     if rest:
+        if not line.endswith("\n"):
+            print("", file=out)
+
         print(STDOUT_HEADER_MARKER, file=out)
         for line in rest:
             print("# >>", line, file=out)
